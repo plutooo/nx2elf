@@ -102,8 +102,8 @@ struct NsoFile {
 		kData,
 		kNumSegment
 	};
-	static constexpr std::array<u8, 4> nso_magic{ 'N', 'S', 'O', '0' };
-	static constexpr std::array<u8, 4> mod_magic{ 'M', 'O', 'D', '0' };
+	const char* nso_magic = "NSO0";
+	const char* mod_magic = "MOD0";
 	struct SegmentHeader {
 		u32 file_offset; // maybe &1==compressed?
 		u32 mem_offset;
@@ -143,7 +143,7 @@ struct NsoFile {
 		file = File::Read(path);
 		#define CHK(x) if (!(x)) return false;
 		CHK(file.size() >= sizeof(Header));
-		CHK(!memcmp(&file[0], &nso_magic[0], nso_magic.size()));
+		CHK(!memcmp(&file[0], &nso_magic[0], 4));
 		#undef CHK
 		header = reinterpret_cast<decltype(header)>(&file[0]);
 		return true;
@@ -240,7 +240,7 @@ struct NsoFile {
 		auto mod_offset = *reinterpret_cast<u32 *>(&image[4]);
 		auto mod_base = &image[mod_offset];
 		auto mod = reinterpret_cast<ModHeader *>(mod_base);
-		if (memcmp(mod->magic, &mod_magic[0], mod_magic.size()))
+		if (memcmp(mod->magic, &mod_magic[0], 4))
 			return false;
 
 		dynamic = reinterpret_cast<Elf64_Dyn *>(mod_base + mod->dynamic_offset);

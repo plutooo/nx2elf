@@ -100,7 +100,6 @@ bool ElfEHInfo::MeasureFrame(const eh_frame_hdr *hdr, uintptr_t *eh_frame_ptr, s
 			break;
 		default:
 			fprintf(stderr, "unexpected enc base %02x\n", enc);
-			__debugbreak();
 			break;
 		}
 		switch (enc & 0x0f) {
@@ -115,7 +114,6 @@ bool ElfEHInfo::MeasureFrame(const eh_frame_hdr *hdr, uintptr_t *eh_frame_ptr, s
 			break;
 		default:
 			fprintf(stderr, "unexpected enc type %02x\n", enc);
-			__debugbreak();
 			break;
 		}
 		if (enc & DW_EH_PE_indirect) {
